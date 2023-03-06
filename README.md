@@ -1,5 +1,9 @@
 # ConsumerAPIGithubAngular
 
+* Projeto acadêmico para consumir api externa do github no back-end utilizando Spring Boot com Java e mostrar dados consumidos no front-end com Angular.
+* Utilizado Wiremock para simular resposta HTTP para fazer teste com JUnit 5.
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.9.
 
 ## Development server
