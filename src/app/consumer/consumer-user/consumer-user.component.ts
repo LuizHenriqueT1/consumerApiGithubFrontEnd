@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConsumerUser } from 'src/app/core/models/consumer-user';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-consumer-user',
@@ -14,7 +14,8 @@ import { Router } from '@angular/router';
 export class ConsumerUserComponent implements OnInit {
   constructor(
     private consumerService: ConsumerService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   pageEvent!: PageEvent;
@@ -41,13 +42,12 @@ export class ConsumerUserComponent implements OnInit {
     const pageIndex = event.pageIndex ?? 0;
     const pageSize = event.pageSize ?? 0;
     const lastUserId = this.dataSources.data[this.dataSources.data.length - 1]?.id;
-
+    this.router.navigate(['users'], { queryParams: { since: pageIndex, per_page: pageSize }})
 
 
     if (previousPageIndex < pageIndex) {
       const firstId = this.dataSources.data.at(0)?.id ?? 0;
       this.previousIds.push(firstId -1)
-      console.log("array next", this.previousIds)
       const page = event.pageSize;
 
       this.consumerService.getNextPage(lastUserId, pageSize).subscribe((users) => {
@@ -57,7 +57,6 @@ export class ConsumerUserComponent implements OnInit {
       const page = event.pageSize;
       const lastIdArrayPreviousId = this.previousIds.pop() ?? 0;
 
-      console.log(this.previousIds)
       this.consumerService.getPreviousPage(lastIdArrayPreviousId, pageSize).subscribe((users) => {
         this.dataSources.data = users;
       });
@@ -77,6 +76,7 @@ export class ConsumerUserComponent implements OnInit {
   ngOnInit(): void {
     this.findAllUsers();
     this.consumerUsers$ = this.consumerService.getUsers(this.since, this.pageSize);
+    this.router.navigate(['users'], { queryParams: { since: this.since, per_page: this.pageSize }})
   }
 
 }

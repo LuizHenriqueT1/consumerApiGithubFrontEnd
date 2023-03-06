@@ -63,6 +63,7 @@ export class ConsumerRepositoryComponent implements OnInit {
   loadRepositories() {
     const perPage = this.pageEvent.pageSize;
     const page = this.pageEvent.pageIndex;
+    this.router.navigate([`/users/${this.user}/repos`], { queryParams: { page: page, per_page: perPage }})
 
     this.consumerService.getUserRepositories(this.user, page, perPage).subscribe((res: any) => {
       this.dataSources.data = res
@@ -71,6 +72,7 @@ export class ConsumerRepositoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.consumerUserRepositories$ = this.consumerService.getUserRepositories(this.user, this.pageIndex, this.pageSize)
+    this.router.navigate([`/users/${this.user}/repos`], { queryParams: { page: this.pageIndex, per_page: this.pageSize }})
     this.findUsersRepositories()
     this.getUsersDetails()
   }
